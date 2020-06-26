@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: collectd-exporter
+  name: collectd-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: collectd-exporter
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: collectd-exporter
+    spec:
+      containers:
+      - args:
+        - --collectd.listen-address=0.0.0.0:25826
+        image: prom/collectd-exporter
+        imagePullPolicy: ""
+        name: collectd-exporter
+        ports:
+        - containerPort: 9103
+        - containerPort: 25826
+          protocol: UDP
+        resources: {}
+        securityContext:
+          privileged: true
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
