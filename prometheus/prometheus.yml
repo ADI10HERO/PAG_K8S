@@ -9,12 +9,12 @@ scrape_configs:
   - job_name: 'collectd-exporter'
     scrape_interval: 5s
     static_configs:
-      - targets: ['10.10.120.202:9103']
+      - targets: ['10.99.43.9:9103']
 
   - job_name: 'cadvisor'
     scrape_interval: 5s
     static_configs:
-      - targets: ['cadvisor:8080']
+      - targets: ['10.107.74.242:8080']
 
   - job_name: 'prometheus'
     scrape_interval: 10s
@@ -26,5 +26,5 @@ alerting:
   - scheme: http
     static_configs:
     - targets: 
-      - 'alertmanager:9093'
+      - '10.98.47.134:9093'
 
