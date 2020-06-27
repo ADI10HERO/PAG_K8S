@@ -1,0 +1,11 @@
+wal
+wal/*
+chunks_head
+chunks_head/*
+plugins/*
+plugins
+png
+png/*
+*.db
+lock
+*.active
