@@ -4,16 +4,15 @@ metadata:
   annotations:
     kompose.cmd: kompose convert --volumes hostPath
     kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
   labels:
     io.kompose.service: prometheus
   name: prometheus
 spec:
+  type: NodePort 
   ports:
-  - name: "9090"
+  - name: prometheus
+    protocol: TCP
     port: 9090
-    targetPort: 9090
+    nodePort: 30900
   selector:
     io.kompose.service: prometheus
-status:
-  loadBalancer: {}

@@ -4,12 +4,11 @@ metadata:
   annotations:
     kompose.cmd: kompose convert --volumes hostPath
     kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
   labels:
     io.kompose.service: prometheus
   name: prometheus
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       io.kompose.service: prometheus
@@ -20,7 +19,6 @@ spec:
       annotations:
         kompose.cmd: kompose convert --volumes hostPath
         kompose.version: 1.21.0 (992df58d8)
-      creationTimestamp: null
       labels:
         io.kompose.service: prometheus
     spec:
@@ -37,7 +35,7 @@ spec:
         - containerPort: 9090
         resources: {}
         securityContext:
-          privileged: true
+          runAsUser: 0
         volumeMounts:
         - mountPath: /etc/prometheus
           name: prometheus-hostpath0
@@ -52,4 +50,3 @@ spec:
       - hostPath:
           path: /root/PAG_K8S
         name: prometheus-data
-status: {}

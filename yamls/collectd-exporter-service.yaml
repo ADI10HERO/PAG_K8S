@@ -12,12 +12,13 @@ spec:
   ports:
   - name: "9103"
     port: 9103
-    targetPort: 9103
+    nodePort: 30103
   - name: "25826"
     port: 25826
     protocol: UDP
-    targetPort: 25826
+    nodePort: 30826
   selector:
     io.kompose.service: collectd-exporter
+  type: NodePort
 status:
   loadBalancer: {}

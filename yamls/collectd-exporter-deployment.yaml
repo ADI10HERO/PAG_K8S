@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: collectd-exporter
   name: collectd-exporter
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       io.kompose.service: collectd-exporter
@@ -35,7 +35,7 @@ spec:
           protocol: UDP
         resources: {}
         securityContext:
-          privileged: true
+          runAsUser: 0
       restartPolicy: Always
       serviceAccountName: ""
       volumes: null

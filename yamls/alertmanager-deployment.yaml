@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: alertmanager
   name: alertmanager
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       io.kompose.service: alertmanager
@@ -35,7 +35,7 @@ spec:
         - containerPort: 9093
         resources: {}
         securityContext:
-          privileged: true
+          runAsUser: 0
         volumeMounts:
         - mountPath: /etc/alertmanager
           name: alertmanager-hostpath0

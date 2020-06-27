@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: grafana
   name: grafana
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       io.kompose.service: grafana
@@ -39,7 +39,7 @@ spec:
         - containerPort: 3000
         resources: {}
         securityContext:
-          privileged: true
+          runAsUser: 0
         volumeMounts:
         - mountPath: /var/lib/grafana
           name: grafana-data

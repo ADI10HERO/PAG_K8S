@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: cadvisor
   name: cadvisor
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       io.kompose.service: cadvisor
@@ -32,7 +32,7 @@ spec:
         - containerPort: 8080
         resources: {}
         securityContext:
-          privileged: true
+          runAsUser: 0
         volumeMounts:
         - mountPath: /rootfs
           name: cadvisor-hostpath0

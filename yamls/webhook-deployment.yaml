@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: webhook
   name: webhook
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       io.kompose.service: webhook
