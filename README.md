@@ -64,4 +64,4 @@ Any kind of contribution is most welcome
 ##### Refernces:
 - [Setup prometheus in kubernetes](https://devopscube.com/setup-prometheus-monitoring-on-kubernetes/)
 - [Setup alertmanager in kubernetes](https://devopscube.com/alert-manager-kubernetes-guide/)
-- [Setup grafana in kubernetes]()
+- [Setup grafana in kubernetes](https://devopscube.com/setup-grafana-kubernetes/)

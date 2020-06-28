@@ -1,57 +1,51 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --volumes hostPath
-    kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
   labels:
-    io.kompose.service: grafana
+    adi10hero.monitoring: grafana
+    app: grafana
   name: grafana
+  namespace: monitoring
 spec:
   replicas: 2
   selector:
     matchLabels:
-      io.kompose.service: grafana
+      adi10hero.monitoring: grafana
+      app: grafana
   strategy:
     type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert --volumes hostPath
-        kompose.version: 1.21.0 (992df58d8)
-      creationTimestamp: null
+      name: grafana
       labels:
-        io.kompose.service: grafana
+        adi10hero.monitoring: grafana
+        app: grafana
     spec:
       containers:
-      - env:
+      - name: grafana
+        image: grafana/grafana
+        ports:
+        - containerPort: 3000
+        env:
         - name: GF_SECURITY_ADMIN_PASSWORD
           value: admin
         - name: GF_SECURITY_ADMIN_USER
           value: admin
         - name: GF_USERS_ALLOW_SIGN_UP
           value: "false"
-        image: grafana/grafana
-        imagePullPolicy: ""
-        name: grafana
-        ports:
-        - containerPort: 3000
-        resources: {}
         securityContext:
           runAsUser: 0
         volumeMounts:
         - mountPath: /var/lib/grafana
-          name: grafana-data
-        - mountPath: /etc/grafana/provisioning
-          name: grafana-hostpath1
+          name: grafana-storage
+        - mountPath: /etc/grafana/provisioning/datasources
+          name: grafana-datasources
+          readOnly: false
       restartPolicy: Always
-      serviceAccountName: ""
       volumes:
-      - hostPath:
-          path: /root/PAG_K8S
-        name: grafana-data
-      - hostPath:
-          path: /root/PAG_K8S/grafana/provisioning
-        name: grafana-hostpath1
-status: {}
+        - name: grafana-storage
+          emptyDir: {}
+        - name: grafana-datasources
+          configMap:
+              defaultMode: 420
+              name: grafana-datasources
