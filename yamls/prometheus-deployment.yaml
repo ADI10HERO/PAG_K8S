@@ -3,11 +3,15 @@ kind: Deployment
 metadata:
   name: prometheus-deployment
   namespace: monitoring
+  labels:
+    app: prometheus
+    adi10hero.monitoring: prometheus
 spec:
   replicas: 2
   selector:
     matchLabels:
       adi10hero.monitoring: prometheus
+      app: prometheus
   strategy:
     type: Recreate
   template:

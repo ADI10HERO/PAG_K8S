@@ -19,5 +19,5 @@ data:
     receivers:
     - name: "webhook"
       webhook_configs:
-      - url: 'webhook.monitoring.svc:5000/alerts'
+      - url: 'http://10.10.120.202:5000/alerts' #change later...
         send_resolved: true

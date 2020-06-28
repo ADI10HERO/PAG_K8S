@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     adi10hero.monitoring: prometheus
+    app: prometheus
   name: prometheus
   namespace: monitoring
   annotations:

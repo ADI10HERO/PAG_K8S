@@ -1,19 +1,24 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --volumes hostPath
-    kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
   labels:
-    io.kompose.service: alertmanager
+    adi10hero.monitoring: alertmanager
+    app: alertmanager
   name: alertmanager
+  namespace: monitoring
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path:   /
+      prometheus.io/port:   '8080'
+
 spec:
+  selector: 
+    app: alertmanager
+    adi10hero.monitoring: alertmanager
+  type: NodePort
   ports:
   - name: "9093"
     port: 9093
     targetPort: 9093
-  selector:
-    io.kompose.service: alertmanager
-status:
-  loadBalancer: {}
+    nodePort: 30930
+

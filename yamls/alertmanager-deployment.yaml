@@ -1,48 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --volumes hostPath
-    kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
   labels:
-    io.kompose.service: alertmanager
+    app: alertmanager
+    adi10hero.monitoring: alertmanager
   name: alertmanager
+  namespace: monitoring
 spec:
   replicas: 2
   selector:
     matchLabels:
-      io.kompose.service: alertmanager
+      app: alertmanager
+      adi10hero.monitoring: alertmanager
   strategy:
     type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert --volumes hostPath
-        kompose.version: 1.21.0 (992df58d8)
-      creationTimestamp: null
+      name: alertmanager
       labels:
-        io.kompose.service: alertmanager
+        app: alertmanager
+        adi10hero.monitoring: alertmanager 
     spec:
       containers:
-      - args:
+      - name: alertmanager
+        image: prom/alertmanager
+        args:
         - --config.file=/etc/alertmanager/config.yml
         - --storage.path=/alertmanager
-        image: prom/alertmanager
-        imagePullPolicy: ""
-        name: alertmanager
         ports:
         - containerPort: 9093
-        resources: {}
         securityContext:
           runAsUser: 0
         volumeMounts:
-        - mountPath: /etc/alertmanager
-          name: alertmanager-hostpath0
+        - name: config-volume
+          mountPath: /etc/alertmanager
+        - name: alertmanager
+          mountPath: /alertmanager
       restartPolicy: Always
-      serviceAccountName: ""
       volumes:
-      - hostPath:
-          path: /root/PAG_K8S/alertmanager
-        name: alertmanager-hostpath0
-status: {}
+      - name: config-volume
+        configMap:
+          name: alertmanager-config
+      - name: alertmanager
+        emptyDir: {}
