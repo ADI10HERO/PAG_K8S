@@ -62,6 +62,5 @@ docker container ls # check all are up and healthy
 Any kind of contribution is most welcome
 
 ##### Refernces:
-- Original compose's template : [dockprom](https://github.com/stefanprodan/dockprom)
-
-
+- [Setup prometheus in kubernetes](https://devopscube.com/setup-prometheus-monitoring-on-kubernetes/)
+- [Setup alertmanager in kubernetes]()
