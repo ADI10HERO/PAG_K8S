@@ -1,52 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --volumes hostPath
-    kompose.version: 1.21.0 (992df58d8)
-  labels:
-    io.kompose.service: prometheus
-  name: prometheus
+  name: prometheus-deployment
+  namespace: monitoring
 spec:
   replicas: 2
   selector:
     matchLabels:
-      io.kompose.service: prometheus
+      adi10hero.monitoring: prometheus
   strategy:
     type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert --volumes hostPath
-        kompose.version: 1.21.0 (992df58d8)
       labels:
-        io.kompose.service: prometheus
+        adi10hero.monitoring: prometheus
+        app: prometheus
     spec:
       containers:
-      - args:
+      - name: prometheus
+        image: prom/prometheus
+        args:
         - --config.file=/etc/prometheus/prometheus.yml
         - --storage.tsdb.path=/prometheus
         - --web.console.libraries=/etc/prometheus/console_libraries
         - --web.console.templates=/etc/prometheus/consoles
-        image: prom/prometheus
-        imagePullPolicy: ""
-        name: prometheus
         ports:
         - containerPort: 9090
-        resources: {}
         securityContext:
           runAsUser: 0
         volumeMounts:
-        - mountPath: /etc/prometheus
-          name: prometheus-hostpath0
-        - mountPath: /prometheus
-          name: prometheus-data
+            - name: prometheus-config-volume
+              mountPath: /etc/prometheus/
+            - name: prometheus-storage-volume
+              mountPath: /prometheus/
       restartPolicy: Always
-      serviceAccountName: ""
       volumes:
-      - hostPath:
-          path: /root/PAG_K8S/prometheus
-        name: prometheus-hostpath0
-      - hostPath:
-          path: /root/PAG_K8S
-        name: prometheus-data
+        - name: prometheus-config-volume
+          configMap:
+            defaultMode: 420
+            name: prometheus-server-conf
+        - name: prometheus-storage-volume
+          emptyDir: {}
