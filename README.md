@@ -34,7 +34,9 @@ cd PAG_K8S/
 ```
 
 *Use nano / vim / any text editor you like and change the webhook address of webhook to `cluster-ip-of-webhook:5000/alerts` in `yamls/alertmanager-config.yaml`*
+
 *Make similar appropritate changes in yamls/prometheus-config.yaml and yamls/grafana-datasources-config.yaml*
+
 *In the grafana's config yaml **only line 17, url field will change** to the clusterIp of prometheus*
 
 ```sh
