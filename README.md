@@ -10,18 +10,15 @@
 
 ## Why this Reposiotry?
 
-- Found many repositories with PAG stack deployment docker-compose file, but all used [node-exporter](https://github.com/prometheus/node_exporter).
-- But, if you have collectd intsalled on the system you want to monitor, I couldn't find a pre-made docker-compose file which did that.
+- Did not find repositories with PAG stack deployment as a kubernetes cluster (not to monitor it but itself as a cluster)
 
-*For node-exporter you can checkout the **[master](https://github.com/ADI10HERO/PAG_stack/tree/master)** branch of this repo*
-
-# What will be deployed with this docker-compose?
+# What will be deployed ?
 
 **1.** Prometheus server scraping itself, cAdvisor and collectd-exporter
 
 **2.** Alertmanager for alerting, using this is fairly simple. You can send Slack, IRC even Email notifications.
 
-**3.** Grafana (3 amazing dashboards already available, check references)
+**3.** Grafana.
 
 **4.** cAdvisor, this is used to monitor the docker-host, the machine on which all these containers will run.
 
@@ -32,23 +29,39 @@
 ## How to run 
 
 ```sh
-git clone https://github.com/ADI10HERO/PAG_stack.git
-cd PAG_stack/
+git clone https://github.com/ADI10HERO/PAG_K8S.git
+cd PAG_K8S/
 ```
-*Use nano / vim / any text editor you like and change the webhook address of  to `ip-of-your-machine:5000/alerts` in `alertmanager/config.yml`*
+
+*Use nano / vim / any text editor you like and change the webhook address of webhook to `cluster-ip-of-webhook:5000/alerts` in `yamls/alertmanager-config.yaml`*
+*Make similar appropritate changes in yamls/prometheus-config.yaml and yamls/grafana-datasources-config.yaml*
+*In the grafana's config yaml **only line 17, url field will change** to the clusterIp of prometheus*
 
 ```sh
-docker-compose up -d  # yeah better to run in the background
+chmod +x make_all_executable.sh
+./make_all_executable.sh
 
-docker container ls # check all are up and healthy
+or 
+
+chmod +x *.sh
+
+./create_ns.sh #creates namespace, configs, deployments and services
+kubectl get all -n monitoring # check all are up and healthy
 ```
- 
+
+### How to stop?
+```sh
+./delete_all.sh
+
+## You can delete indiviually too as:
+./delete_<what you want to delete>.sh
+```
 
 
 ## Next steps
 - [ ] Add basic auth to routes using caddy 
 - [ ] Improving the gui and add features of [simple-webhook-reciever](https://github.com/adi10hero/simple-webhook-reciever/)
-- [ ] Automate the webhook address in `alertmanager/config.yml` file
+- [ ] Automate clusterIP address in yaml files
 
 #### Contributing
 - Fork the repository
