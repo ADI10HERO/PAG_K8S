@@ -1,19 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --volumes hostPath
-    kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
   labels:
-    io.kompose.service: cadvisor
+    app: cadvisor
+    adi10hero.monitoring: cadvisor
   name: cadvisor
+  namespace: monitoring
 spec:
   ports:
   - name: "8080"
     port: 8080
     targetPort: 8080
   selector:
-    io.kompose.service: cadvisor
-status:
-  loadBalancer: {}
+    app: cadvisor
+    adi10hero.monitoring: cadvisor

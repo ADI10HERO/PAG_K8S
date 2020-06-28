@@ -1,38 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --volumes hostPath
-    kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: webhook
   name: webhook
+  namespace: monitoring
+  labels:
+    app: webhook
+    adi10hero.monitoring: webhook
 spec:
   replicas: 2
   selector:
     matchLabels:
-      io.kompose.service: webhook
-  strategy: {}
+      app: webhook
+      adi10hero.monitoring: webhook
+  strategy:
+    type: Recreate 
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert --volumes hostPath
-        kompose.version: 1.21.0 (992df58d8)
-      creationTimestamp: null
       labels:
-        io.kompose.service: webhook
+        app: webhook
+        adi10hero.monitoring: webhook
     spec:
       containers:
       - image: adi10hero/simple-webhook-reciever
-        imagePullPolicy: ""
         name: webhook
         ports:
         - containerPort: 5000
-        resources: {}
         securityContext:
           privileged: true
       restartPolicy: Always
-      serviceAccountName: ""
       volumes: null
-status: {}

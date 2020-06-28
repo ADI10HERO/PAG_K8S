@@ -19,5 +19,5 @@ data:
     receivers:
     - name: "webhook"
       webhook_configs:
-      - url: 'http://10.10.120.202:5000/alerts' #change later...
+      - url: 'http://10.104.12.74:5000/alerts'
         send_resolved: true
