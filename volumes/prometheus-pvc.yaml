@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-pvc
+  namespace: monitoring
+  labels:
+    app: prometheus-pvc
+    adi10hero.monitoring: prometheus-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: monitoring  
+  resources:
+    requests:
+      storage: 500Mi
+  selector:
+    matchLabels:
+      app: prometheus-pv
+      adi10hero.monitoring: prometheus-pv
+
+    
