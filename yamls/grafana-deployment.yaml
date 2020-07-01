@@ -33,6 +33,16 @@ spec:
           value: admin
         - name: GF_USERS_ALLOW_SIGN_UP
           value: "false"
+        - name: GF_DATABASE_TYPE
+          value: postgres
+        - name: GF_DATABASE_HOST
+          value: 10.109.166.184:5432
+        - name: GF_DATABASE_NAME
+          value: grafanadb
+        - name: GF_DATABASE_USER
+          value: opnfv
+        - name: GF_DATABASE_PASSWORD
+          value: opnfv
         securityContext:
           runAsUser: 0
         volumeMounts:
@@ -44,7 +54,8 @@ spec:
       restartPolicy: Always
       volumes:
         - name: grafana-storage
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: grafana-pvc
         - name: grafana-datasources
           configMap:
               defaultMode: 420

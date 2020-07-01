@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-configuration
+  namespace: monitoring
+  labels:
+    app: postgres
+    adi10hero.monitoring: postgres
+data:
+  POSTGRES_DB: grafanadb
+  POSTGRES_USER: opnfv
+  POSTGRES_PASSWORD: opnfv
