@@ -82,5 +82,4 @@ data:
       alertmanagers:
       - scheme: http
         static_configs:
-        - targets: 
-          - '10.97.36.21:9093'
+        - targets: ['10.97.36.21:9093', '10.105.240.197:9093']

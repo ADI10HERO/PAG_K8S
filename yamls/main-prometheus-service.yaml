@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    adi10hero.monitoring: prometheus-main
+    app: prometheus-main
+  name: prometheus-main
+  namespace: monitoring
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port:   '9090'
+spec:
+  type: ClusterIP
+  ports:
+  - name: prometheus-main
+    protocol: TCP
+    port: 9090
+  selector:
+    adi10hero.monitoring: prometheus
+    adi10hero.monitoring: prometheus1
+    app: prometheus
+    app: prometheus1
+
