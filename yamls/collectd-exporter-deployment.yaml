@@ -7,7 +7,7 @@ metadata:
     app: collectd-exporter
     adi10hero.monitoring: collectd-exporter
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: collectd-exporter

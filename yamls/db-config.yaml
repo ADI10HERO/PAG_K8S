@@ -7,6 +7,6 @@ metadata:
     app: postgres
     adi10hero.monitoring: postgres
 data:
-  POSTGRES_DB: grafanadb
+  POSTGRES_DB: grafana
   POSTGRES_USER: opnfv
   POSTGRES_PASSWORD: opnfv

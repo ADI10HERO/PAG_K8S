@@ -2,35 +2,36 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: alertmanager
-    adi10hero.monitoring: alertmanager
-  name: alertmanager
+    app: alertmanager1
+    adi10hero.monitoring: alertmanager1
+  name: alertmanager1
   namespace: monitoring
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: alertmanager
-      adi10hero.monitoring: alertmanager
+      app: alertmanager1
+      adi10hero.monitoring: alertmanager1
   strategy:
     type: Recreate
   template:
     metadata:
-      name: alertmanager
+      name: alertmanager1
       labels:
-        app: alertmanager
-        adi10hero.monitoring: alertmanager 
+        app: alertmanager1
+        adi10hero.monitoring: alertmanager1 
     spec:
       containers:
-      - name: alertmanager
+      - name: alertmanager1
         image: prom/alertmanager
         args:
         - --config.file=/etc/alertmanager/config.yml
         - --storage.path=/alertmanager
-        - --cluster.peer=10.105.240.197:6783
+        - --cluster.peer=10.97.36.21:6783
         - --cluster.listen-address=0.0.0.0:6783
         ports:
         - containerPort: 9093
+        # - containerPort: 9094
         - containerPort: 6783
         securityContext:
           runAsUser: 0
@@ -43,6 +44,6 @@ spec:
       volumes:
       - name: config-volume
         configMap:
-          name: alertmanager-config
+          name: alertmanager1-config
       - name: alertmanager
         emptyDir: {}

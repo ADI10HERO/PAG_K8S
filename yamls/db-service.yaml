@@ -10,10 +10,10 @@ spec:
   selector:
     app: postgres
     adi10hero.monitoring: postgres
-  type: ClusterIP
+  type: NodePort
   ports:
   - name: "postgres-port"
     port: 5432
     targetPort: 5432
-
+    nodePort: 30432
 
