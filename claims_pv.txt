@@ -1,0 +1,4 @@
+NAME             STATUS   VOLUME          CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+db-pvc           Bound    db-pv           1Gi        RWX            monitoring     7d4h
+grafana-pvc      Bound    grafana-pv      1Gi        RWX            monitoring     7d4h
+prometheus-pvc   Bound    prometheus-pv   1Gi        RWX            monitoring     8d

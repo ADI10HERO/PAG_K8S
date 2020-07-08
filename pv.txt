@@ -1,0 +1,10 @@
+NAME            CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                                                   STORAGECLASS     REASON   AGE
+db-pv           1Gi        RWX            Retain           Bound    monitoring/db-pvc                                       monitoring                7d4h
+grafana-pv      1Gi        RWX            Retain           Bound    monitoring/grafana-pvc                                  monitoring                7d4h
+prometheus-pv   1Gi        RWX            Retain           Bound    monitoring/prometheus-pvc                               monitoring                8d
+pv-data-vm1     5Gi        RWO            Retain           Bound    logging/elasticsearch-data-quickstart-es-vm1-data-0     log-vm1-data              5d5h
+pv-data-vm2     5Gi        RWO            Retain           Bound    logging/elasticsearch-data-quickstart-es-vm2-data-0     log-vm2-data              5d5h
+pv-data-vm3     5Gi        RWO            Retain           Bound    logging/elasticsearch-data-quickstart-es-vm3-data-0     log-vm3-data              5d5h
+pv-master-vm1   5Gi        RWO            Retain           Bound    logging/elasticsearch-data-quickstart-es-vm1-master-0   log-vm1-master            5d5h
+pv-master-vm2   5Gi        RWO            Retain           Bound    logging/elasticsearch-data-quickstart-es-vm2-master-0   log-vm2-master            5d5h
+pv-master-vm3   5Gi        RWO            Retain           Bound    logging/elasticsearch-data-quickstart-es-vm3-master-0   log-vm3-master            5d5h

@@ -1,0 +1,53 @@
+NAME                                          READY   STATUS    RESTARTS   AGE     IP                NODE   NOMINATED NODE   READINESS GATES
+pod/alertmanager-5f5746c984-pklwl             1/1     Running   0          5d22h   192.168.162.89    vm3    <none>           <none>
+pod/alertmanager1-69ccbdc958-cxg2j            1/1     Running   0          5d22h   192.168.185.227   vm2    <none>           <none>
+pod/cadvisor-78d29                            1/1     Running   0          9d      192.168.185.209   vm2    <none>           <none>
+pod/cadvisor-jwd88                            1/1     Running   1          9d      192.168.225.61    vm1    <none>           <none>
+pod/cadvisor-r9xxc                            1/1     Running   1          9d      192.168.162.119   vm3    <none>           <none>
+pod/collectd-exporter-558875c46f-vxths        1/1     Running   0          7d3h    192.168.162.127   vm3    <none>           <none>
+pod/grafana-544fb486-qzfkx                    1/1     Running   0          7d      192.168.225.30    vm1    <none>           <none>
+pod/postgres-statefulset-0                    1/1     Running   0          7d      192.168.225.26    vm1    <none>           <none>
+pod/prometheus-deployment-5478d4c5dd-h9xl2    1/1     Running   0          6d1h    192.168.162.75    vm3    <none>           <none>
+pod/prometheus1-deployment-7bbff657ff-crzk2   1/1     Running   0          5d22h   192.168.185.240   vm2    <none>           <none>
+pod/webhook-6984846745-xqf5b                  1/1     Running   0          10d     192.168.185.243   vm2    <none>           <none>
+
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                          AGE     SELECTOR
+service/alertmanager        NodePort    10.97.36.21      <none>        9093:30930/TCP,6783:30679/TCP    10d     adi10hero.monitoring=alertmanager,app=alertmanager
+service/alertmanager1       NodePort    10.105.240.197   <none>        9093:30931/TCP,6783:30678/TCP    5d22h   adi10hero.monitoring=alertmanager1,app=alertmanager1
+service/cadvisor            ClusterIP   10.99.89.121     <none>        8080/TCP                         10d     adi10hero.monitoring=cadvisor,app=cadvisor
+service/collectd-exporter   NodePort    10.106.186.3     <none>        9103:30103/TCP,25826:30826/UDP   7d3h    adi10hero.monitoring=collectd-exporter,app=collectd-exporter
+service/grafana             NodePort    10.103.176.128   <none>        3000:30000/TCP                   7d4h    adi10hero.monitoring=grafana,app=grafana
+service/postgres            NodePort    10.105.121.224   <none>        5432:30432/TCP                   7d4h    adi10hero.monitoring=postgres,app=postgres
+service/prometheus          NodePort    10.100.133.166   <none>        9090:30900/TCP                   9d      adi10hero.monitoring=prometheus
+service/prometheus-main     ClusterIP   10.105.67.54     <none>        9090/TCP                         5d21h   adi10hero.monitoring=prometheus1,app=prometheus1
+service/prometheus1         NodePort    10.105.138.49    <none>        9090:30901/TCP                   5d22h   adi10hero.monitoring=prometheus1,app=prometheus1
+service/webhook             NodePort    10.104.12.74     <none>        5000:30500/TCP                   10d     adi10hero.monitoring=webhook,app=webhook
+
+NAME                      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE   CONTAINERS   IMAGES                              SELECTOR
+daemonset.apps/cadvisor   3         3         3       3            3           <none>          9d    cadvisor     gcr.io/google-containers/cadvisor   adi10hero.monitoring=cadvisor,app=cadvisor
+
+NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS          IMAGES                              SELECTOR
+deployment.apps/alertmanager             1/1     1            1           10d     alertmanager        prom/alertmanager                   adi10hero.monitoring=alertmanager,app=alertmanager
+deployment.apps/alertmanager1            1/1     1            1           5d22h   alertmanager1       prom/alertmanager                   adi10hero.monitoring=alertmanager1,app=alertmanager1
+deployment.apps/collectd-exporter        1/1     1            1           7d3h    collectd-exporter   prom/collectd-exporter              adi10hero.monitoring=collectd-exporter,app=collectd-exporter
+deployment.apps/grafana                  1/1     1            1           7d      grafana             grafana/grafana                     adi10hero.monitoring=grafana,app=grafana
+deployment.apps/prometheus-deployment    1/1     1            1           6d1h    prometheus          prom/prometheus                     adi10hero.monitoring=prometheus,app=prometheus
+deployment.apps/prometheus1-deployment   1/1     1            1           5d22h   prometheus          prom/prometheus                     adi10hero.monitoring=prometheus1,app=prometheus1
+deployment.apps/webhook                  1/1     1            1           10d     webhook             adi10hero/simple-webhook-reciever   adi10hero.monitoring=webhook,app=webhook
+
+NAME                                                DESIRED   CURRENT   READY   AGE     CONTAINERS          IMAGES                              SELECTOR
+replicaset.apps/alertmanager-5f5746c984             1         1         1       5d22h   alertmanager        prom/alertmanager                   adi10hero.monitoring=alertmanager,app=alertmanager,pod-template-hash=5f5746c984
+replicaset.apps/alertmanager-64d559d45d             0         0         0       10d     alertmanager        prom/alertmanager                   adi10hero.monitoring=alertmanager,app=alertmanager,pod-template-hash=64d559d45d
+replicaset.apps/alertmanager-64db4b6579             0         0         0       5d22h   alertmanager        prom/alertmanager                   adi10hero.monitoring=alertmanager,app=alertmanager,pod-template-hash=64db4b6579
+replicaset.apps/alertmanager-9494d4d84              0         0         0       5d22h   alertmanager        prom/alertmanager                   adi10hero.monitoring=alertmanager,app=alertmanager,pod-template-hash=9494d4d84
+replicaset.apps/alertmanager1-5bb57bcb7d            0         0         0       5d22h   alertmanager1       prom/alertmanager                   adi10hero.monitoring=alertmanager1,app=alertmanager1,pod-template-hash=5bb57bcb7d
+replicaset.apps/alertmanager1-69c4b6cc69            0         0         0       5d22h   alertmanager1       prom/alertmanager                   adi10hero.monitoring=alertmanager1,app=alertmanager1,pod-template-hash=69c4b6cc69
+replicaset.apps/alertmanager1-69ccbdc958            1         1         1       5d22h   alertmanager1       prom/alertmanager                   adi10hero.monitoring=alertmanager1,app=alertmanager1,pod-template-hash=69ccbdc958
+replicaset.apps/collectd-exporter-558875c46f        1         1         1       7d3h    collectd-exporter   prom/collectd-exporter              adi10hero.monitoring=collectd-exporter,app=collectd-exporter,pod-template-hash=558875c46f
+replicaset.apps/grafana-544fb486                    1         1         1       7d      grafana             grafana/grafana                     adi10hero.monitoring=grafana,app=grafana,pod-template-hash=544fb486
+replicaset.apps/prometheus-deployment-5478d4c5dd    1         1         1       6d1h    prometheus          prom/prometheus                     adi10hero.monitoring=prometheus,app=prometheus,pod-template-hash=5478d4c5dd
+replicaset.apps/prometheus1-deployment-7bbff657ff   1         1         1       5d22h   prometheus          prom/prometheus                     adi10hero.monitoring=prometheus1,app=prometheus1,pod-template-hash=7bbff657ff
+replicaset.apps/webhook-6984846745                  1         1         1       10d     webhook             adi10hero/simple-webhook-reciever   adi10hero.monitoring=webhook,app=webhook,pod-template-hash=6984846745
+
+NAME                                    READY   AGE   CONTAINERS   IMAGES
+statefulset.apps/postgres-statefulset   1/1     7d    postgres     postgres:12
