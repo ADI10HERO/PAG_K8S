@@ -20,6 +20,15 @@ spec:
         adi10hero.monitoring: prometheus
         app: prometheus
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                  - vm2
       containers:
       - name: prometheus
         image: prom/prometheus
