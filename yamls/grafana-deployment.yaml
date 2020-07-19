@@ -36,7 +36,7 @@ spec:
         - name: GF_DATABASE_TYPE
           value: postgres
         - name: GF_DATABASE_HOST
-          value: 10.105.121.224:5432
+          value: postgres:5432
         - name: GF_DATABASE_NAME
           value: grafana
         - name: GF_DATABASE_USER

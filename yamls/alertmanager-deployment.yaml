@@ -27,7 +27,7 @@ spec:
         args:
         - --config.file=/etc/alertmanager/config.yml
         - --storage.path=/alertmanager
-        - --cluster.peer=10.105.240.197:6783
+        - --cluster.peer=alertmanager1:6783
         - --cluster.listen-address=0.0.0.0:6783
         ports:
         - containerPort: 9093
