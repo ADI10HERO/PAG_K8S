@@ -1,6 +1,6 @@
-# PAG Stack no Kubernetes
+# PAG Stack on Kubernetes using Ansible
 
-## Prometheus, Alert Manager, Grafana (PAG) stack for dynamic monitoring deployed as a Kubernetes Cluster
+#### Prometheus, Alert Manager, Grafana (PAG) stack for dynamic monitoring deployed as a Kubernetes Cluster using Ansible
 
 * Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud. Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project has a very active developer and user community. It is now a standalone open source project and maintained independently of any company
 
@@ -31,32 +31,7 @@
 ```sh
 git clone https://github.com/ADI10HERO/PAG_K8S.git
 cd PAG_K8S/
-```
-
-*Use nano / vim / any text editor you like and change the webhook address of webhook to `cluster-ip-of-webhook:5000/alerts` in `yamls/alertmanager-config.yaml`*
-
-*Make similar appropritate changes in yamls/prometheus-config.yaml and yamls/grafana-datasources-config.yaml*
-
-*In the grafana's config yaml **only line 17, url field will change** to the clusterIp of prometheus*
-
-```sh
-chmod +x make_all_executable.sh
-./make_all_executable.sh
-
-or 
-
-chmod +x *.sh
-
-./create_ns.sh #creates namespace, configs, deployments and services
-kubectl get all -n monitoring # check all are up and healthy
-```
-
-### How to stop?
-```sh
-./delete_all.sh
-
-## You can delete indiviually too as:
-./delete_<what you want to delete>.sh
+# refer to README.rst for further detailed steps
 ```
 
 
