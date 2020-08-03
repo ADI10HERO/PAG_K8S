@@ -1,0 +1,289 @@
+---
+#PAG setup in k8s cluster
+
+#***********************************************************************************************************
+#copy all yaml to /tmp/files/
+#***********************************************************************************************************
+- name: copy all yaml to /tmp/files/
+  copy: 
+    src: ../files/
+    dest: /tmp/files/
+
+#***********************************************************************************************************
+#Creating Namespace
+#***********************************************************************************************************
+- name: Creating Monitoring Namespace
+  k8s:
+    state: present
+    src: /tmp/files/monitoring-namespace.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#creating Persistent Volume
+#***********************************************************************************************************
+- name: creating Persistent Volume for Prometheus
+  k8s:
+    state: present
+    src: /tmp/files/prometheus-pv.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#creating Persistent Volume
+#***********************************************************************************************************
+- name: creating Persistent Volume for db
+  k8s:
+    state: present
+    src: /tmp/files/db-pv.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#creating Persistent Volume
+#***********************************************************************************************************
+- name: creating Persistent Volume for Grafana
+  k8s:
+    state: present
+    src: /tmp/files/grafana-pv.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#creating Persistent Volume Claim
+#***********************************************************************************************************
+- name: creating Persistent Volume Claim for Prometheus
+  k8s:
+    state: present
+    src: /tmp/files/prometheus-pvc.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#creating Persistent Volumes Claim
+#***********************************************************************************************************
+- name: creating Persistent Volume Claim for db
+  k8s:
+    state: present
+    src: /tmp/files/db-pvc.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#creating Persistent Volume Claim
+#***********************************************************************************************************
+- name: creating Persistent Volume Claim for Grafana
+  k8s:
+    state: present
+    src: /tmp/files/grafana-pvc.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the CAdvisor deamonset
+#***********************************************************************************************************
+- name: Creating cAdvisor deamonset
+  k8s:
+    state: present
+    src: /tmp/files/cadvisor-deamonset.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Starting the CAdvisor service
+#***********************************************************************************************************
+- name: Starting cAdvisor service
+  k8s:
+    state: present
+    src: /tmp/files/cadvisor-service.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the NodeExporter deamonset
+#***********************************************************************************************************
+- name: Creating NodeExporter deamonset
+  k8s:
+    state: present
+    src: /tmp/files/nodeexporter-deamonset.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Starting the NodeExporter service
+#***********************************************************************************************************
+- name: Starting NodeExporter service
+  k8s:
+    state: present
+    src: /tmp/files/nodeexporter-service.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the collectd-exporter deployment
+#***********************************************************************************************************
+- name: Creating collectd-exporter deamonset
+  k8s:
+    state: present
+    src: /tmp/files/collectd-exporter-deployment.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the collectd-exporter service
+#***********************************************************************************************************
+- name: Creating collectd-exporter service
+  k8s:
+    state: present
+    src: /tmp/files/collectd-exporter-service.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Webhook goes here
+#***********************************************************************************************************
+
+#***********************************************************************************************************
+#Making the config file for Alertmanagers
+#***********************************************************************************************************
+- name: Creating config map for Alertmanagers
+  k8s:
+    state: present
+    src: /tmp/files/alertmanager-config.yaml
+    namespace: monitoring
+
+- name: Creating config map for Alertmanagers
+  k8s:
+    state: present
+    src: /tmp/files/alertmanager1-config.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the 1st alertmanager deployment
+#***********************************************************************************************************
+- name: Creating 1st alertmanager deployment
+  k8s:
+    state: present
+    src: /tmp/files/alertmanager-deployment.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the 1st alertmanager service
+#***********************************************************************************************************
+- name: Creating 1st alertmanager service
+  k8s:
+    state: present
+    src: /tmp/files/alertmanager-service.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the 2nd alertmanager deployment
+#***********************************************************************************************************
+- name: Creating 2nd alertmanager deployment
+  k8s:
+    state: present
+    src: /tmp/files/alertmanager1-deployment.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the 2nd alertmanager service
+#***********************************************************************************************************
+- name: Creating 2nd alertmanager service
+  k8s:
+    state: present
+    src: /tmp/files/alertmanager1-service.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the db config
+#***********************************************************************************************************
+- name: Creating postresql configuration
+  k8s:
+    state: present
+    src: /tmp/files/db-config.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the db statefulset
+#***********************************************************************************************************
+- name: Creating postresql statefulset
+  k8s:
+    state: present
+    src: /tmp/files/db-statefulset.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the db service
+#***********************************************************************************************************
+- name: Creating postresql service
+  k8s:
+    state: present
+    src: /tmp/files/db-service.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Making the config file for Prometheus
+#***********************************************************************************************************
+- name: Creating 1st Prometheus Config
+  k8s:
+    state: present
+    src: /tmp/files/prometheus-config.yaml
+    namespace: monitoring
+
+- name: Creating 2nd Prometheus Config
+  k8s:
+    state: present
+    src: /tmp/files/prometheus1-config.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Starting Prometheus
+#***********************************************************************************************************
+- name: Starting Prometheus 1
+  k8s:
+    state: present
+    src: /tmp/files/prometheus-deployment.yaml
+    namespace: monitoring
+
+- name: Starting Prometheus 2
+  k8s:
+    state: present
+    src: /tmp/files/prometheus1-deployment.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Starting Prometheus Service
+#***********************************************************************************************************
+- name: Starting Prometheus 1 Service
+  k8s:
+    state: present
+    src: /tmp/files/prometheus-service.yaml
+    namespace: monitoring
+
+- name: Starting Prometheus 2 Service
+  k8s:
+    state: present
+    src: /tmp/files/prometheus1-service.yaml
+    namespace: monitoring
+
+- name: Starting Main Prometheus Service
+  k8s:
+    state: present
+    src: /tmp/files/main-prometheus-service.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#Starting Grafana
+#***********************************************************************************************************
+- name: Creating Grafana Datasource Config
+  k8s:
+    state: present
+    src: /tmp/files/grafana-datasource-config.yaml
+    namespace: monitoring
+
+- name: Starting Grafana
+  k8s:
+    state: present
+    src: /tmp/files/grafana-deployment.yaml
+    namespace: monitoring
+
+- name: Starting Grafana Service
+  k8s:
+    state: present
+    src: /tmp/files/grafana-service.yaml
+    namespace: monitoring
+
+#***********************************************************************************************************
+#removing /tmp/files
+#***********************************************************************************************************
+- name: Removing /tmp/files
+  file: 
+    path: "/tmp/files"
+    state: absent

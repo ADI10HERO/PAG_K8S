@@ -1,127 +1,154 @@
+=================
 Metrics
-====================
+=================
+Table of Contents
+=================
+.. contents::
+.. section-numbering::
 
-A. Installation
-===================
+Setup
+=======
 
-1. How is the installation done? 
---------------------------------
-- A VM was created, and docker, docker-compose, pip, python, were installed using yum package manager (latest stable version)
+Prerequisites
+-------------------------
+- Require 3 VMs to setup K8s
+- ``$ sudo yum install ansible``
+- ``$ pip install openshift pyyaml kubernetes`` (required for ansible K8s module)
+- Update IPs in all these files (if changed)
+    - ``ansible/group_vars/all.yml``
+    - ``ansible/hosts``
 
-- Created Prometheus, Alertmanager, Grafana, containers are deployed using docker-compose
- 
-- Collectd-Exporter, cAdvisor and a simple webhook receiver to receive alerts are also included in the compose file. The file and detailed explanation can be found `here <https://github.com/ADI10HERO/PAG_stack>`_
+Setup Structure
+---------------
+.. image:: images/setup.png #todo
 
-- Collectds running on Node4 and Node1 of Pod12, were configured to send metrics using binary network plugin of collectd, to the collectd-exporter container on the VM. 
+Installation - Client Side
+-------------------------
 
- 
-2. What are the prerequisites?
--------------------------------
-- How to read yaml 
-- Knowledge about docker, docker-compose
-- Configuration familiarity for:
+Nodes
+`````
+- **Node1** = 10.10.120.21
+- **Node4** = 10.10.120.24
 
- 1. Prometheus
+How installation is done?
+`````````````````````````
+- collectd installation
+   `Please follow this <https://comtronic.com.au/how-to-install-and-setup-collectd-on-centos7/>`_ 
+- Make following lines are present in collectd.conf (usually found at /opt/collected/etc/)
+  `
+   <Plugin network>
+     
+     Server "10.10.120.211" "30826"
+   </Plugin>
+  `
+- Restart the service
+   ``sudo systemctl restart collectd``
+   
+   OR
+   
+   run : 
+   
+   ``cd /opt/collectd``
+   
+   # make changes
+   
+   ``sudo sbin/collectcd``
 
- 2. Alertmanager
+   *(make sure only one instance is running at a time)*
 
- 3. Collectd (on the machine which is to be monitored)
+Installation - Server Side
+-------------------------
 
-- Some familiarity with PromQL (Prometheus Query Language) 
-
-
-3. How to build the containers.
---------------------------------
-- On the VM
-    1. cd PAG_stack
-    
-    2. docker-compose up -d
-
-    3. docker container ls
-       
-       You should see all 6 containers UP and cadvisor healthy
-- On the machines which need to be monitored
-    Check if collectd is configured correctly, this can be done by checking if following lines are there in the collectd.conf file and the daemon is running
-    
-        LoadPlugin network
-        
-        <Plugin network>
-        
-        Server "prometheus.example.com" "25826"
-        
-        </Plugin>
-           
-
-
-4. Do we have HA?
---------------------------------
-- Prometheus by default doesn't have HA
- 
-
-
-5. If not, Can we achieve it easily ? Can we use both VMs to achieve HA?
------------------------------------------------------------------------------
-- Yes and yes!
-- A simple method is to keep 2 instances of the same stack, scraping same servers, raising same alerts
-- `More on prometheus being HA <https://prometheus.io/docs/introduction/faq/#can-prometheus-be-made-highly-available>`_
-
-
-6. Elasticsearch support HA, does Prometheus?
-----------------------------------------------------------------
-- Nativelty doesn't, but it is configured to do so.
+Nodes
+`````
+Inside Jumphost - POD12
+   - **VM1** = 10.10.120.211
+   - **VM2** = 10.10.120.203
+   - **VM3** = 10.10.120.204
 
 
-7. Can we have one more VM to have a complete 3-Node HA solution  
----------------------------------------------------------------------
-- Done
+How installation is done?
+`````````````````````````
+**Using Ansible:**
+   - **K8s**
+      - **Prometheus:** 2 independent deployments
+      - **Alertmanager:** 2 independent deployments
+      - **Grafana:** 1 Replica deployment
+      - **cAdvisor:** 1 daemonset, i.e 3 replicas, one on each node
+      - **collectd-exporter:** 1 Replica
+      - **postgresql:** 1 statefulset with 3 replicas
+   - **NFS Server:** at each VM to store grafana data at following path
+      - ``/usr/share/grafana``
+
+How to setup?
+`````````````
+- **To setup K8s cluster, EFK and PAG:** Run the ansible-playbook ``ansible/playbooks/setup.yaml``
+- **To clean everything:** Run the ansible-playbook ``ansible/playbooks/clean.yaml``
+
+Do we have HA?
+````````````````
+Yes
+
+Configuration
+=============
+
+K8s
+---
+Path to all yamls (Server Side)
+````````````````````````````````
+``ansible/roles/monitoring/files/``
+
+K8s namespace
+`````````````
+``monitoring``
+
+Configuration
+---------------------------
+
+Serivces and Ports
+``````````````````````````
+
+Services and their ports are listed below, 
+one can go to IP of any node on the following ports, 
+service will correctly redirect you 
 
 
+  ======================       =======
+      Service                   Port
+  ======================       ======= 
+     Prometheus                 30900
+     Prometheus1                30901
+     Alertmanager               30930
+     Alertmanager1              30931
+     Grafana                    30000
+     Collectd-exporter          30130
+  ======================       =======
 
-B. Configuration
-===================
-
-1. What are all the configurations the user should know?
---------------------------------------------------
-- IP of the VM : 10.10.120.202
- 
-  
-  ====================       =======
-   Service                                        Port
-  ====================       =======
-   Prometheus                               9090
-   Alertmanager                             9093
-   Grafana                                      3000
-   Collectd-exporter                        9130
-   cAdvisor                                     8080
-   webhook receiver                      5000
-  ====================       =======
-
--  All configurations, including the docker-compose.yml file is in the PAG_stack folder
--  Prometheus and alertmanager have their respective configuration (yaml) files in their respective folders in the PAG_stack folder
-- On the client machines, collectd is generally installed in '/opt/collectd/' if its CentOs / RHEL machine, and the configuration can be found at '/opt/collectd/etc/collectd.conf'
-- Grafana folder has pre-made dashboard Json files, which can be imported directly in grafana.
-- Password and username to the grafana panel is written in the "config" file in the PAG_stack folder.
-
-
-2. How to modify configurations?
-----------------------------------
-- Ports and names of the containers can be modified by changing the required values in the docker-compose.yml file.
-- All other container configurations can be changed by editing their respective yaml files mentioned above on the VM
+How to change Configuration?
+------------------------------
+- Ports, names of the containers, pretty much every configuration can be modified by changing the required values in the respective yaml files.
 - For metrics, on the client's machine, edit the collectd's configuration file, and add required plugins. For more details refer `this <https://collectd.org/wiki/index.php/First_steps>`_
 
-
-
-C. Data Management
-====================
+Data Management
+================================
 
 1. Where is the data stored now?
 ----------------------------------
-  Docker volume, specified in the compose file
+  - Grafana login and user data ==> On nodes, using postgresql database, 1 copy on each node  
+  - Grafana dashboards and other data ==> On master, at /usr/share/monitoring_data/grafana
+  - Prometheus Data ==> On VM2 and VM3, at /usr/share/monitoring_data/prometheus 
+  
+  **Note: Promethei data also are independent of each other, a shared data solution gave errors**
 
 2. Do we have backup of data?
 -------------------------------
-  No
+  Promethei even though independent scrape same targets, 
+  have same alert rules, therefore generate very similar data.
 
+  Grafana's postgres part of the data has 2 replicas
+  Grafana's NFS part of the data has no backup
+  
+  
 3. When containers are restarted, the data is still accessible?
 -----------------------------------------------------------------
-  Yes, unless the volumes are explicitly deleted.
+  Yes, unless the data directories are deleted (/usr/share/monitoring_data) from each node

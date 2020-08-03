@@ -1,0 +1,21 @@
+---
+#Edit /etc/export 
+- name: Edit /etc/export file for NFS
+  lineinfile: 
+    path: /etc/exports 
+    line: "{{item.line}}"
+    state: absent
+  with_items:
+    - {line: "/usr/share/monitoring_data/grafana     *(rw,sync,no_root_squash,no_subtree_check)"}
+
+#uninstall NFS server
+- name: Uninstalling NFS server utils
+  yum:
+    name: nfs-utils
+    state: absent
+
+#remove Grafana data
+- name: Removing Directory for grafana
+  file: 
+    path: "/usr/share/monitoring_data/grafana"
+    state: absent

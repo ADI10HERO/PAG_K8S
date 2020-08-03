@@ -1,0 +1,1 @@
+kubeadm join 10.10.120.211:6443 --token n7rd6q.wj3iljwt9692p3cz     --discovery-token-ca-cert-hash sha256:981c84d857a147d10363d05234e9cf652cab617faa29434bb09dfd343a290e24 

@@ -1,0 +1,23 @@
+---
+#create Dir /srv/nfs
+
+- name: Create Directory for grafana
+  file: path="/usr/share/monitoring_data/grafana" state=directory
+
+#installing NFS
+- name: Installing NFS server utils
+  yum:
+    name: nfs-utils
+    state: present
+
+#update /etc/export file 
+- name: Edit /etc/export file for NFS
+  lineinfile: path=/etc/exports line="{{item.line}}"
+  with_items:
+    - {line: "/usr/share/monitoring_data/grafana     *(rw,sync,no_root_squash,no_subtree_check)"}
+
+#starting NFS service
+- name: 'starting NFS service'
+  service:
+    name: nfs
+    state: restarted

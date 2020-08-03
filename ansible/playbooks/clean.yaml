@@ -1,0 +1,26 @@
+
+clean monitoring 
+ - name: Clean PAG setup
+   hosts: master
+   roles:
+     - clean-monitoring
+
+
+#IF KUBELET IS RUNNING THEN RUN THIS
+#clean k8s cluster 
+- name: Clean k8s cluster
+  hosts: master
+  roles:
+    - clean-k8s-cluster
+
+#reset worker-nodes
+- name: Reset worker-nodes
+  hosts: worker-nodes
+  roles:
+    - clean-k8s-worker-reset
+
+#unistall pre-requisites for k8s
+- name: unistall pre-requisites for k8s
+  hosts: all
+  roles:
+    - clean-k8s-pre

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc
+  namespace: monitoring
+  labels:
+    app: db-pvc
+    adi10hero.monitoring: db-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: monitoring  
+  resources:
+    requests:
+      storage: 2Gi
+  selector:
+    matchLabels:
+      app: db-pv
+      adi10hero.monitoring: db-pv
+
+
+    

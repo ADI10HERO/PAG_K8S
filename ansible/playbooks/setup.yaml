@@ -1,0 +1,25 @@
+#Pre-requisites for k8s and NFS server
+- name: Pre-requisites for k8s in all the nodes
+  hosts: all
+  roles:
+    - k8s-pre
+    - nfs
+
+#master setup for k8s
+- name: master setup for k8s
+  hosts: master
+  roles:
+    - k8s-master
+
+#worker setup for k8s
+- name: worker setup for k8s
+  hosts: worker-nodes
+  roles:
+    - k8s-worker
+
+
+PAG setup in k8s
+ - name: PAG setup in k8s
+   hosts: master
+   roles:
+     - monitoring

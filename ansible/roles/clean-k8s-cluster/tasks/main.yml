@@ -1,0 +1,21 @@
+---
+#check kubelet is running or not
+- name: check for kubelet
+  shell: "systemctl status kubelet"
+  register: _svc_kubelet
+  failed_when: _svc_kubelet.rc != 0 and ("could not be found" not in _svc_kubelet.stderr)
+
+#IF KUBELET IS RUNNING, THEN
+#reset k8s
+- name: reset k8s
+  shell: |
+    kubectl drain {{vm3}} --delete-local-data --force --ignore-daemonsets
+    kubectl drain {{vm2}} --delete-local-data --force --ignore-daemonsets
+    kubectl drain {{vm1}} --delete-local-data --force --ignore-daemonsets
+    kubectl delete node {{vm3}}
+    kubectl delete node {{vm2}}
+    kubectl delete node {{vm1}}
+    sudo kubeadm reset -f
+    sudo rm $HOME/.kube/config
+  when: "_svc_kubelet.rc == 0"
+

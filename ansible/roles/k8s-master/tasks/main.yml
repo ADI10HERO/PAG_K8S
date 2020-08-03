@@ -1,0 +1,36 @@
+---
+#pull k8s images
+- name: Pulling images required for setting up a Kubernetes cluster
+  shell: kubeadm config images pull
+
+#reset k8s
+- name: Resetting kubeadm
+  shell: kubeadm reset -f
+
+#init k8s
+- name: Initializing Kubernetes cluster
+  shell: kubeadm init --apiserver-advertise-address {{ad_addr}} --pod-network-cidr={{pod_cidr}}
+
+#Copying required files
+- name: Copying required files
+  shell: |
+   mkdir -p $HOME/.kube
+   sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
+   sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+#get token 
+- name: Storing token for future purpose.
+  shell: kubeadm token create --print-join-command
+  register: token
+
+#save token to join worker
+- name: Storing token for worker
+  local_action: copy content={{ token.stdout }} dest={{ token_file }}
+
+#install calico
+- name: Install Network Add-on
+  command: kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+
+#Taint master
+- name: Taint master
+  command: kubectl taint nodes --all node-role.kubernetes.io/master-

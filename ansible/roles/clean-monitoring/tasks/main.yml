@@ -1,0 +1,34 @@
+---
+#Deleting PAG setup from k8s cluster
+
+#check kubelet is running or not
+- name: check for kubelet
+  shell: "systemctl status kubelet"
+  register: _svc_kubelet
+  failed_when: _svc_kubelet.rc != 0 and ("could not be found" not in _svc_kubelet.stderr)
+
+#***********************************************************************************************************
+#copy all yaml to /tmp/files/
+#***********************************************************************************************************
+- name: copy namespace yaml to /tmp/files/
+  copy: 
+    src: ../../monitoring/files/monitoring-namespace.yaml
+    dest: /tmp/files/monitoring-namespace.yaml
+
+#***********************************************************************************************************
+#Deleting Namespace
+#***********************************************************************************************************
+- name: Deleting Namespace
+  k8s:
+    state: absent
+    src: /tmp/files/monitoring-namespace.yaml
+    namespace: monitoring
+  when: "_svc_kubelet.rc == 0"
+
+#***********************************************************************************************************
+#removing /tmp/files
+#***********************************************************************************************************
+- name: Removing /tmp/files
+  file: 
+    path: "/tmp/files"
+    state: absent
