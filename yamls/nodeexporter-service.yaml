@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    adi10hero.monitoring: node-exporter
+    app: node-exporter
+  name: node-exporter
+  namespace: monitoring
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9100"
+spec:
+  ports:
+  - name: "node-exporter"
+    port: 9100
+    targetPort: 9100
+  selector:
+    adi10hero.monitoring: node-exporter
+    app: node-exporter
